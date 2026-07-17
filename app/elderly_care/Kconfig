@@ -1,0 +1,55 @@
+#
+# Elderly Care Terminal - AI Environment Sensing & Elderly Care
+#
+
+config CONTEST2026_118_ELDERLY_CARE
+	bool "Elderly Care Terminal Application"
+	default n
+	---help---
+		Enable the elderly care terminal application.
+		Features: human detection, voice event detection,
+		temperature/humidity monitoring, alert system.
+
+if CONTEST2026_118_ELDERLY_CARE
+
+config ELDERLY_CARE_CAMERA_ENABLE
+	bool "Enable Camera Module"
+	default y
+
+config ELDERLY_CARE_DSP_ENABLE
+	bool "Enable DSP Inference Module"
+	default y
+
+config ELDERLY_CARE_AUDIO_ENABLE
+	bool "Enable Audio Module"
+	default y
+
+config ELDERLY_CARE_SENSOR_ENABLE
+	bool "Enable Environment Sensor Module"
+	default y
+
+config ELDERLY_CARE_ALERT_ENABLE
+	bool "Enable Alert Module"
+	default y
+
+config ELDERLY_CARE_DISPLAY_ENABLE
+	bool "Enable Display Module"
+	default y
+
+config ELDERLY_CARE_WIFI_ENABLE
+	bool "Enable WiFi Module"
+	default y
+
+config ELDERLY_CARE_POWER_SAVE_ENABLE
+	bool "Enable Power Save Module"
+	default y
+
+config ELDERLY_CARE_LOG_ENABLE
+	bool "Enable Log Cache Module"
+	default y
+
+config ELDERLY_CARE_TASK_STACK_SIZE
+	int "Main task stack size"
+	default 8192
+
+endif # CONTEST2026_118_ELDERLY_CARE
