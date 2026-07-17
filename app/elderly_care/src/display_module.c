@@ -28,12 +28,54 @@ static char g_alert_text[32];
 static char g_wifi_text[32];
 static char g_uptime_text[32];
 
+/* LVGL runtime state (initialized once, reused across update calls) */
+
+static lv_nuttx_result_t g_lvgl_result;
+static bool g_lvgl_initialized = false;
+
 /****************************************************************************
  * Name: display_module_init
  ****************************************************************************/
 
 int display_module_init(void)
 {
+  /* Initialize LVGL core and NuttX display driver (once).
+
+     NuttX LVGL requires lv_init() + lv_nuttx_init() to bind the
+     framebuffer (/dev/fb0) before any LVGL API (such as lv_scr_act)
+     can be used.  See apps/examples/lvgldemo for the canonical pattern.
+   */
+
+  if (!g_lvgl_initialized)
+    {
+      lv_nuttx_dsc_t info;
+
+      lv_init();
+      lv_nuttx_dsc_init(&info);
+      info.fb_path = "/dev/fb0";
+
+      /* Disable input devices to avoid fdcheck assertion in lv_timer_handler.
+         The touchscreen (/dev/input0, /dev/utouch) read path triggers a
+         panic in fdcheck_protect when lv_indev_read calls read().  Since
+         elderly_care only needs display output (no touch interaction),
+         we NULL all input paths so LVGL creates no indev devices. */
+
+      info.input_path = NULL;
+      info.utouch_path = NULL;
+      info.mouse_path = NULL;
+
+      lv_nuttx_init(&info, &g_lvgl_result);
+
+      if (g_lvgl_result.disp == NULL)
+        {
+          syslog(LOG_ERR, "lv_nuttx_init failed: no display\n");
+          return -ENODEV;
+        }
+
+      g_lvgl_initialized = true;
+      syslog(LOG_INFO, "LVGL initialized with /dev/fb0\n");
+    }
+
   /* Get active screen */
 
   g_scr = lv_scr_act();
@@ -166,6 +208,15 @@ int display_module_update(struct system_state_s *state)
     }
 
   lv_label_set_text(g_lbl_uptime, g_uptime_text);
+
+  /* Drive LVGL task handler so rendering actually happens.
+     Without this, labels are updated in memory but never flushed
+     to /dev/fb0.  lv_timer_handler returns the idle time in ms. */
+
+  if (g_lvgl_initialized)
+    {
+      lv_timer_handler();
+    }
 
   return 0;
 }
