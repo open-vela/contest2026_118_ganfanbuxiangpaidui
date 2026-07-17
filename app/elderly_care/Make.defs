@@ -1,0 +1,7 @@
+############################################################################
+# Contest 2026 team 118 elderly care app - Make.defs
+############################################################################
+
+ifneq ($(CONFIG_CONTEST2026_118_ELDERLY_CARE),)
+CONFIGURED_APPS += $(APPDIR)/packages/demos/contest2026_118_elderly_care
+endif
