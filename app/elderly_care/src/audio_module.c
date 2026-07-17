@@ -35,13 +35,12 @@ int audio_module_init(void)
   struct audio_caps_desc_s caps;
   memset(&caps, 0, sizeof(caps));
   caps.caps.ac_len = sizeof(caps);
-  caps.caps.ac_type.audio_type = AUDIO_TYPE_INPUT;
+  caps.caps.ac_type = AUDIO_TYPE_INPUT;
   caps.caps.ac_channels = AUDIO_CHANNELS;
-  caps.caps.ac_chmap = AUDIO_CHANNEL_MAP_STEREO;
-  caps.caps.ac_controls.b[0] = AUDIO_SUBFMT_END;
-  caps.caps.ac_sample_rate = AUDIO_SAMPLE_RATE;
-  caps.caps.ac_bitrate = AUDIO_SAMPLE_RATE * AUDIO_CHANNELS * 16;
-  caps.caps.ac_bitwidth = 16;
+  caps.caps.ac_chmap = 0x03;  /* Stereo: L + R */
+  caps.caps.ac_controls.hw[0] = AUDIO_SAMPLE_RATE;            /* Sample rate (low 16 bits) */
+  caps.caps.ac_controls.b[2] = 16;                            /* Bit width */
+  caps.caps.ac_controls.b[3] = (AUDIO_SAMPLE_RATE >> 16);     /* Sample rate (high bits) */
 
   ioctl(g_audio_fd, AUDIOIOC_CONFIGURE, (unsigned long)&caps);
 
