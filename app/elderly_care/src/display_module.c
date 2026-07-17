@@ -45,33 +45,33 @@ int display_module_init(void)
 
   /* Create labels */
 
-  g_lbl_temp = lv_label_create(g_scr, NULL);
+  g_lbl_temp = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_temp, "Temp: -- C");
-  lv_obj_align(g_lbl_temp, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 10);
+  lv_obj_align(g_lbl_temp, LV_ALIGN_TOP_LEFT, 10, 10);
 
-  g_lbl_humi = lv_label_create(g_scr, NULL);
+  g_lbl_humi = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_humi, "Humi: --%");
-  lv_obj_align(g_lbl_humi, g_lbl_temp, LV_ALIGN_OUT_BOTTOM_LEFT,
+  lv_obj_align_to(g_lbl_humi, g_lbl_temp, LV_ALIGN_OUT_BOTTOM_LEFT,
                0, 5);
 
-  g_lbl_human = lv_label_create(g_scr, NULL);
+  g_lbl_human = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_human, "Human: N/A");
-  lv_obj_align(g_lbl_human, g_lbl_humi, LV_ALIGN_OUT_BOTTOM_LEFT,
+  lv_obj_align_to(g_lbl_human, g_lbl_humi, LV_ALIGN_OUT_BOTTOM_LEFT,
                0, 5);
 
-  g_lbl_alert = lv_label_create(g_scr, NULL);
+  g_lbl_alert = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_alert, "Alerts: 0");
-  lv_obj_align(g_lbl_alert, g_lbl_human, LV_ALIGN_OUT_BOTTOM_LEFT,
+  lv_obj_align_to(g_lbl_alert, g_lbl_human, LV_ALIGN_OUT_BOTTOM_LEFT,
                0, 5);
 
-  g_lbl_wifi = lv_label_create(g_scr, NULL);
+  g_lbl_wifi = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_wifi, "WiFi: Disconnected");
-  lv_obj_align(g_lbl_wifi, g_lbl_alert, LV_ALIGN_OUT_BOTTOM_LEFT,
+  lv_obj_align_to(g_lbl_wifi, g_lbl_alert, LV_ALIGN_OUT_BOTTOM_LEFT,
                0, 5);
 
-  g_lbl_uptime = lv_label_create(g_scr, NULL);
+  g_lbl_uptime = lv_label_create(g_scr);
   lv_label_set_text(g_lbl_uptime, "Up: 0s");
-  lv_obj_align(g_lbl_uptime, g_lbl_wifi, LV_ALIGN_OUT_BOTTOM_LEFT,
+  lv_obj_align_to(g_lbl_uptime, g_lbl_wifi, LV_ALIGN_OUT_BOTTOM_LEFT,
                0, 5);
 
   syslog(LOG_INFO, "Display module initialized\n");

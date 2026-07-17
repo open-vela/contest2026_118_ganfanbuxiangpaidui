@@ -118,11 +118,13 @@ int alert_module_trigger(enum elderly_care_event_e event,
 
   /* Drive LED via GPIO (turn on) */
 
+#ifdef CONFIG_DEV_GPIO
   if (g_gpio_fd >= 0)
     {
       bool led_on = true;
       ioctl(g_gpio_fd, GPIOC_WRITE, (unsigned long)&led_on);
     }
+#endif
 
   g_alert_active = true;
 
@@ -157,11 +159,13 @@ int alert_module_stop(void)
 
   /* Turn off LED */
 
+#ifdef CONFIG_DEV_GPIO
   if (g_gpio_fd >= 0)
     {
       bool led_on = false;
       ioctl(g_gpio_fd, GPIOC_WRITE, (unsigned long)&led_on);
     }
+#endif
 
   g_alert_active = false;
   return 0;
